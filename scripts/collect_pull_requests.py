@@ -77,7 +77,9 @@ def fetch_pull_requests(url, headers, params):
 
 
 def format_pull_request(pull_request):
-    labels = [label['name'] for label in pull_request.get('labels', [])]
+    if pull_request["user"]["login"] in ("dependabot[bot]", "github-actions[bot]"):
+        return ""
+    labels = [label["name"] for label in pull_request.get("labels", [])]
     labels_text = f"Labels: {', '.join(labels)}" if labels else "No labels"
     return (
         f"## PR #{pull_request['number']} - {pull_request['title']}\n\n"
